@@ -4,18 +4,30 @@
 
 import pysftp
 import os
+from ConfigUtils import *
+import base64
 
 class SFTPUtils:
 
   def __init__(self, configItems):
-    self._username = configItems['username']
-    self._password = configItems['password']
-    self._hostname = configItems['hostname']
+    self._config_dir =  configItems['config_dir']
+    self._sftp_config_file = configItems['sftp_config_file']
+    self._sftpConfigs = ConfigUtils.setConfigs(self._config_dir, self._sftp_config_file)
+    self._username = None
+    self._password = None
+    self._hostname = None
+    self._sftp = None
+    self.setConfigs()
+
+  def setConfigs(self):
+    self._username =  self._sftpConfigs['username']
+    if ( self._sftpConfigs['password']):
+      self._password = base64.b64decode(self._sftpConfigs['password'])
+    self._hostname =  self._sftpConfigs['hostname']
     self._sftp = pysftp.Connection(self._hostname, username=self._username, password=self._password)
 
   def getFileList(self, fileList, remoteDir=None, localDir=None, preserve_mtime=True):
     for fn in fileList:
-      print fn
       item = self.getFile(self._sftp, fn, remoteDir,localDir)
 
   @staticmethod
@@ -25,7 +37,12 @@ class SFTPUtils:
       fnameFull = str(os.path.join(remoteDir, fname))
     if(not (localDir is None)):
       downloadFname = str(os.path.join(localDir, fname))
-      sftpConn.get(fnameFull, downloadFname)
+      try:
+        sftpConn.get(fnameFull, downloadFname)
+        print "Downloaded: " + fname
+      except Exception, e:
+        print "ERROR: Could not download " + fname
+        print str(e)
     else:
       sftpConn.get(fnameFull, preserve_mtime)
 

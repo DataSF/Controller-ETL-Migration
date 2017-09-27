@@ -1,0 +1,34 @@
+config_dir: configs/
+files:
+  con_0003_spending_and_revenue_all_years.csv:
+    fourXFour: 3uk3-wtgy
+    dataset_name: CON-Spending and Revenue
+    historic: abc
+  con_0005_vendor_payments_purchase_order_summary.csv:
+    fourXFour: xfav-zgt5
+    historic: abc
+    dataset_name: CON-Vendor Payments
+  con_0006_vendor_payments_vouchers.csv:
+    fourXFour:  cjcy-h98g
+    dataset_name: CON-Vouchers
+    historic: abc
+  con_0025_purchasing_commodity_data.csv:
+    fourXFour: v3uy-zu9r
+    historic: abc
+    dataset_name: CON-Purchasing Commodity data
+remote_dir: /CONT/
+#email_config_file: email_config_server.yaml
+email_config_file: email_config_gmail.yaml
+download_dir: downloads/
+exception_logfile: exceptions.log
+log_dir: logs/
+app_name: Controller ETL Migration
+socrata_client_config_fname: socrata_config.yaml
+row_id_field: row_id
+dataset_name_field: Socrata Dataset Name
+fourXFour: fourXFour
+dataset_records_cnt_field: DatasetRecordsCnt
+isLoaded: isLoaded
+src_records_cnt_field: SrcRecordsCnt
+base_url: https://data.sfgov.org/resource/
+sftp_config_file: sftp_configs.yaml

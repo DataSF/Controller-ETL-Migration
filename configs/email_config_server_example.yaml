@@ -1,0 +1,7 @@
+server_addr: YOUR EMAIL SERVER ADDRESS - 0.0.00.00
+server_port: your emailer server port
+email_addr: email address your want to send from
+email_pass:
+recipients: somebody@example.com, anybody@example.com
+sender_addr: yoursenderemails@example.com
+bcc: somebcc@example.com

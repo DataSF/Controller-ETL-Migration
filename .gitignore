@@ -15,6 +15,9 @@ logs/*
 output/*
 downloads/*
 configs/sftp_configs.yaml
+configs/email_config_gmail.yaml
+configs/socrata_config.yaml
+configs/email_config_server.yaml
 *ipynb
 # Packages #
 ############
