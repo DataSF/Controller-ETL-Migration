@@ -60,11 +60,13 @@ def main():
   scrud = SocrataCRUD(client, clientItems, configItems, logger)
   sQobj = SocrataQueries(clientItems, configItems, logger)
   fileList = configItems['files'].keys()
+  fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   sftp = SFTPUtils(configItems)
   jobResults = []
   try:
     print "**** Downloading Files From the SFTP **********"
     sftp.getFileList(fileList, configItems['remote_dir'], configItems['download_dir'])
+    sftp.getFileList(fileListHistoric, configItems['remote_dir'], configItems['download_dir'])
   except Exception, e:
     print "ERROR: Could not download files from the SFTP"
     print str(e)
@@ -72,8 +74,11 @@ def main():
   for fn in fileList:
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
+    fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
     if FileUtils.fileExists(fnFullPath):
       dictList = FileUtils.read_csv_into_dictlist(fnFullPath)
+      dictListHistoric = FileUtils.read_csv_into_dictlist(fnFullPathHistoric)
+      dictList = dictListHistoric + dictList
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':len(dictList), 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       jobResults.append(dataset_info)
