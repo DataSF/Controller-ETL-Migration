@@ -17,8 +17,8 @@ files:
     historic: con_0025_purchasing_commodity_data_historic.csv
     dataset_name: CON-Purchasing Commodity data
 remote_dir: /CONT/
-#email_config_file: email_config_server.yaml
-email_config_file: email_config_gmail.yaml
+email_config_file: email_config_server.yaml
+#email_config_file: email_config_gmail.yaml
 download_dir: downloads/
 exception_logfile: exceptions.log
 log_dir: logs/
