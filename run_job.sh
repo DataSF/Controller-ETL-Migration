@@ -32,7 +32,7 @@ config_fn=""
 python_path=""
 job_name=""
 
-while getopts "h?:d:c:p:t:f:m:" opt; do
+while getopts "h?:d:c:p:j:m:" opt; do
     case "$opt" in
     h|\?)
         display_help
@@ -44,7 +44,7 @@ while getopts "h?:d:c:p:t:f:m:" opt; do
         ;;
     p)  python_path=$OPTARG
         ;;
-    j) job_name=$OPTARG
+    j) python_file_to_run=$OPTARG
     esac
 done
 
@@ -70,7 +70,7 @@ if [ -z "$python_path" ]; then
     display_help
     exit 1
 fi
-if [ -z "$job_name" ]; then
+if [ -z "$python_file_to_run" ]; then
     echo "*****You must enter a python file to run****"
     display_help
     exit 1
@@ -82,5 +82,5 @@ config_dir=$path_to_main_dir$config
 
 
 #run the job
-$python_path $path_to_main_dir$python_job -c $config_fn -d $config_dir
+$python_path $path_to_main_dir$python_file_to_run -c $config_fn -d $config_dir
 

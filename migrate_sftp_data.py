@@ -90,6 +90,5 @@ def main():
   dsse.sendJobStatusEmail(jobResults)
 
 
-
 if __name__ == "__main__":
     main()
