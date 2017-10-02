@@ -19,7 +19,7 @@ files:
 remote_dir: /CONT/
 email_config_file: email_config_server.yaml
 #email_config_file: email_config_gmail.yaml
-download_dir: downloads/
+download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
 exception_logfile: exceptions.log
 log_dir: logs/
 app_name: Controller ETL Migration
