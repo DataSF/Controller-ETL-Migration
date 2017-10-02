@@ -1,4 +1,4 @@
-config_dir: configs/
+config_dir: /home/ubuntu/Migrate-SFTP-Data/configs/
 files:
   con_0003_spending_and_revenue_all_years.csv:
     fourXFour: 3uk3-wtgy
