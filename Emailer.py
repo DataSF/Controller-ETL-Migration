@@ -49,7 +49,7 @@ class Emailer():
         self._server_port = self._emailConfigs['server_port']
         self._sender =  self._emailConfigs['sender_addr']
         self._bcc = self._emailConfigs['bcc']
-        if 'sender_password' in self._emailConfigs.keys()
+        if 'sender_password' in self._emailConfigs.keys():
             self._password = base64.b64decode(self._emailConfigs['sender_password'])
 
 
