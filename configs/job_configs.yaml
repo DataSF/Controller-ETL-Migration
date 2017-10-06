@@ -1,4 +1,5 @@
-config_dir: /home/ubuntu/Migrate-SFTP-Data/configs/
+#config_dir: /home/ubuntu/Migrate-SFTP-Data/configs/
+config_dir: /Users/j9/Desktop/Controller-ETL-Migration/configs/
 files:
   con_0003_spending_and_revenue_all_years.csv:
     fourXFour: 3uk3-wtgy
@@ -19,7 +20,9 @@ files:
 remote_dir: /CONT/
 email_config_file: email_config_server.yaml
 #email_config_file: email_config_gmail.yaml
-download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
+#download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
+download_dir: /Users/j9/Desktop/Controller-ETL-Migration/downloads/
+
 exception_logfile: exceptions.log
 log_dir: logs/
 app_name: Controller ETL Migration
