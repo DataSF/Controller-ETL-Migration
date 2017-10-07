@@ -59,7 +59,6 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
     chunk = chunk.rename(columns=dictNames)
     chunk = PandasUtils.fillNaWithBlank(chunk)
     dictList = PandasUtils.convertDfToDictrows(chunk)
-    print dictList[0:10]
     dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
     dataset_info['row_id'] = 'blah'
 
@@ -77,10 +76,10 @@ def main():
   sQobj = SocrataQueries(clientItems, configItems, logger)
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
-  '''
-  sftp = SFTPUtils(configItems)
-  print sftp
   jobResults = []
+  #sftp = SFTPUtils(configItems)
+  #print sftp
+  ''''
   try:
     print "**** Downloading Files From the SFTP **********"
     sftp.getFileList(fileList, configItems['remote_dir'], configItems['download_dir'])
@@ -90,17 +89,21 @@ def main():
     print str(e)
   sftp.closeSFTPConnection()
   '''
-  for fn in fileList[0:1]:
+  for fn in fileList[3:4]:
+    print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
     if FileUtils.fileExists(fnFullPath):
+      print "****"
+      print fnFullPath
+      print "******"
       #fnL = loadFileChunks(scrud, fnConfigObj, fnFullPath, 5000)
-      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
+      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
       #print "Loaded " + str(fnLHistorical) + "lines"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
+      #fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
       print "Loaded " + str(fnL) + "lines"
-      #dictList = dictListHistoric + dictList
+      dictList = dictListHistoric + dictList
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       #dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       jobResults.append(dataset_info)
