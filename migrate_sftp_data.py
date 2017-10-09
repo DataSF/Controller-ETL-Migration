@@ -88,15 +88,17 @@ def main():
     print str(e)
   sftp.closeSFTPConnection()
   '''
-  for fn in fileList[2:3]:
+  for fn in fileList[0:1]:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
     if FileUtils.fileExists(fnFullPath):
+      print
       print "****"
       print fnFullPath
       print "******"
+      print
       #fnL = loadFileChunks(scrud, fnConfigObj, fnFullPath, 5000)
       fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
       #print "Loaded " + str(fnLHistorical) + "lines"
