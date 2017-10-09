@@ -77,18 +77,17 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
-  #sftp = SFTPUtils(configItems)
-  #print sftp
-  ''''
+  sftp = SFTPUtils(configItems)
+  print sftp
   try:
     print "**** Downloading Files From the SFTP **********"
     sftp.getFileList(fileList, configItems['remote_dir'], configItems['download_dir'])
-    #sftp.getFileList(fileListHistoric, configItems['remote_dir'], configItems['download_dir'])
+    sftp.getFileList(fileListHistoric, configItems['remote_dir'], configItems['download_dir'])
   except Exception, e:
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  '''
+  ''''
   for fn in fileList[3:4]:
     print fn
     fnFullPath = configItems['download_dir']+fn
@@ -114,6 +113,6 @@ def main():
   #dsse = JobStatusEmailerComposer(configItems, logger)
   #dsse.sendJobStatusEmail(jobResults)
 
-
+'''
 if __name__ == "__main__":
     main()
