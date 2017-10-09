@@ -51,7 +51,7 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize):
+  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False):
     chunkhead = chunk.columns.values
     chunkhead_lower = [item.lower() for item in chunkhead]
     dictNames = dict(zip(chunkhead, chunkhead_lower))
@@ -78,7 +78,6 @@ def main():
   jobResults = []
   sftp = SFTPUtils(configItems)
   print sftp
-  '''
   try:
     print "**** Downloading Files From the SFTP **********"
     sftp.getFileList(fileList, configItems['remote_dir'], configItems['download_dir'])
@@ -87,8 +86,7 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  '''
-  for fn in fileList[0:1]:
+  for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
@@ -99,10 +97,9 @@ def main():
       print fnFullPath
       print "******"
       print
-      #fnL = loadFileChunks(scrud, fnConfigObj, fnFullPath, 5000)
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
+      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
       #print "Loaded " + str(fnLHistorical) + "lines"
-      #fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
       print "Loaded " + str(fnL) + "lines"
       dictList = dictListHistoric + dictList
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
@@ -112,8 +109,8 @@ def main():
     else:
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
-  #dsse = JobStatusEmailerComposer(configItems, logger)
-  #dsse.sendJobStatusEmail(jobResults)
+  dsse = JobStatusEmailerComposer(configItems, logger)
+  dsse.sendJobStatusEmail(jobResults)
 
 
 if __name__ == "__main__":
