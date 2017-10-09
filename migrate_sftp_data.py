@@ -113,6 +113,6 @@ def main():
   #dsse = JobStatusEmailerComposer(configItems, logger)
   #dsse.sendJobStatusEmail(jobResults)
 
-'''
+
 if __name__ == "__main__":
     main()
