@@ -47,7 +47,6 @@ def parse_opts():
   return fieldConfigFile, config_inputdir
 
 
-
 def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
@@ -79,6 +78,7 @@ def main():
   jobResults = []
   sftp = SFTPUtils(configItems)
   print sftp
+  '''
   try:
     print "**** Downloading Files From the SFTP **********"
     sftp.getFileList(fileList, configItems['remote_dir'], configItems['download_dir'])
@@ -87,8 +87,8 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  ''''
-  for fn in fileList[3:4]:
+  '''
+  for fn in fileList[1:2]:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
