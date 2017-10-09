@@ -88,7 +88,7 @@ def main():
     print str(e)
   sftp.closeSFTPConnection()
   '''
-  for fn in fileList[1:2]:
+  for fn in fileList[2:3]:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
