@@ -22,7 +22,7 @@ def parse_opts():
                       help=helpmsgConfigFile ,)
 
   helpmsgConfigDir = '''Use the -d to add directory path for the config files. EX: /home/ubuntu/configs
-                        Full Example of command: python migrate_sftp_data.py -c job_configs.yaml -d configs/ '''
+                        Full Example of command: python2 migrate_sftp_data.py -c job_configs.yaml -d configs/ '''
   parser.add_option('-d', '--configdir',
                       action='store',
                       dest='configDir',
@@ -53,7 +53,7 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False):
     chunkhead = chunk.columns.values
-    chunkhead_lower = [item.lower() for item in chunkhead]
+    chunkhead_lower = [item.lower().replace("#", "") for item in chunkhead]
     dictNames = dict(zip(chunkhead, chunkhead_lower))
     chunk = chunk.rename(columns=dictNames)
     chunk = PandasUtils.fillNaWithBlank(chunk)
@@ -67,6 +67,7 @@ def main():
   configItems = cI.getConfigs()
   lg = pyLogger(configItems)
   logger = lg.setConfig()
+  dsse = JobStatusEmailerComposer(configItems, logger)
   logger.info("****************JOB START******************")
   sc = SocrataClient(config_inputdir, configItems, logger)
   client = sc.connectToSocrata()
@@ -86,6 +87,7 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
+  
   for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
@@ -97,9 +99,9 @@ def main():
       print fnFullPath
       print "******"
       print
-      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
+      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
       #print "Loaded " + str(fnLHistorical) + "lines"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
+      #fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
       print "Loaded " + str(fnL) + "lines"
       dictList = dictListHistoric + dictList
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
@@ -109,8 +111,13 @@ def main():
     else:
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
-  dsse = JobStatusEmailerComposer(configItems, logger)
-  dsse.sendJobStatusEmail(jobResults)
+  if( len(jobResults) > 1 ):
+    dsse.sendJobStatusEmail(jobResults)
+  else:
+    dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+    jobResults.append(dataset_info)
+    dsse.sendJobStatusEmail(jobResults)
+
 
 
 if __name__ == "__main__":
