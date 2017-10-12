@@ -100,8 +100,8 @@ def main():
       print "******"
       print
       fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
-      #print "Loaded " + str(fnLHistorical) + "lines"
-      #fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
+      print "Loaded " + str(fnLHistorical) + "lines"
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
       print "Loaded " + str(fnL) + "lines"
       dictList = dictListHistoric + dictList
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
