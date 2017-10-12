@@ -48,6 +48,7 @@ def parse_opts():
 
 
 def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
+  totalRows = 0
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
@@ -58,8 +59,14 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
     chunk = chunk.rename(columns=dictNames)
     chunk = PandasUtils.fillNaWithBlank(chunk)
     dictList = PandasUtils.convertDfToDictrows(chunk)
-    dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
-    dataset_info['row_id'] = 'blah'
+    try:  
+      dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
+      dataset_info['row_id'] = 'blah'
+      totalRows = totalRows + chunkSize
+    except Exception, e:
+      print "ERROR: Could not upload data"
+      print str(e)
+  return totalRows
 
 def main():
   fieldConfigFile, config_inputdir = parse_opts()
@@ -77,6 +84,7 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
+  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -87,27 +95,26 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  
+  '''
   for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
+    chunkSize = configItems['chunkSize']
     if FileUtils.fileExists(fnFullPath):
       print
       print "****"
       print fnFullPath
       print "******"
       print
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, 5000, True)
+      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, True)
       print "Loaded " + str(fnLHistorical) + "lines"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, 5000, True)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize)
       print "Loaded " + str(fnL) + "lines"
-      dictList = dictListHistoric + dictList
+      dictList = fnL + fnLHistorical
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-      #dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       jobResults.append(dataset_info)
-      #print dataset_info
     else:
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)

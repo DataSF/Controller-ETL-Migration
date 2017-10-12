@@ -38,3 +38,4 @@ isLoaded: isLoaded
 src_records_cnt_field: SrcRecordsCnt
 base_url: https://data.sfgov.org/resource/
 sftp_config_file: sftp_configs.yaml
+chunkSize: 10000
