@@ -52,7 +52,7 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False):
+  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding='cp1252'):
     chunkhead = chunk.columns.values
     chunkhead_lower = [item.lower().replace("#", "") for item in chunkhead]
     dictNames = dict(zip(chunkhead, chunkhead_lower))
