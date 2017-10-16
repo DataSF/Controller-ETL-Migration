@@ -84,7 +84,6 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
-  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -95,7 +94,6 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  '''
   for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
