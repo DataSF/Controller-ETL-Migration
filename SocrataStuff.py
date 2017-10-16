@@ -89,7 +89,6 @@ class SocrataCRUD:
                     rejectedChunk = self.insertData(dataset, chunk)
         else:
             msg =  "upserting... " + dataset[self.name]
-            print msg
             self._logger.info(msg)
             for chunk in insertChunks:
                 rejectedChunk = self.insertData(dataset, chunk)
@@ -100,14 +99,14 @@ class SocrataCRUD:
     def replaceDataSet(self, dataset, chunk):
         result = self.client.replace( dataset[self.fourXFour], chunk )
         dataset[self.rowsInserted] = dataset[self.rowsInserted] + int(result['Rows Created'])
-        time.sleep(0.25)
+        time.sleep(0.15)
 
 
     #@retry( tries=10, delay=1, backoff=2)
     def insertData(self, dataset, chunk):
         result = self.client.upsert(dataset[self.fourXFour], chunk)
         dataset[self.rowsInserted] = dataset[self.rowsInserted] + int(result['Rows Created']) + int(result['Rows Updated'])
-        time.sleep(0.25)
+        time.sleep(0.15)
 
 
     def makeChunks(self, insertDataSet):

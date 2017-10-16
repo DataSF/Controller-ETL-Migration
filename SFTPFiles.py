@@ -33,6 +33,7 @@ class SFTPUtils:
   @staticmethod
   def getFile(sftpConn, fname, remoteDir, localDir, preserve_mtime=True):
     fnameFull = fname
+    print fnameFull
     if(not(remoteDir is None)):
       fnameFull = str(os.path.join(remoteDir, fname))
     if(not (localDir is None)):

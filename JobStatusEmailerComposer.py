@@ -30,9 +30,14 @@ class JobStatusEmailerComposer:
         #else:
         #    dataset['jobStatus'] = "FAILURE"
         #    self.failure =  True
-        dataset['jobStatus'] = dataset['isLoaded'].upper()
-        if dataset['isLoaded'] != 'success':
+        
+        if 'isLoaded' in dataset.keys():
+            if dataset['isLoaded'] != 'success':
+                self.failure = True
+        else:
             self.failure = True
+            dataset['isLoaded'] = 'false'
+        dataset['jobStatus'] = dataset['isLoaded'].upper()
         return dataset
 
     def makeJobStatusAttachment(self,  finishedDataSets ):

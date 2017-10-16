@@ -20,6 +20,8 @@ import collections
 import os.path
 import json
 import time
+import subprocess
+import pandas as pd
 
 
 class DateUtils:
@@ -116,6 +118,41 @@ class UnicodeWriter:
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
+
+class LargeFileUtils:
+    @staticmethod
+    def getFileHeader(file_path, delimiter):
+        with open(file_path) as fn:
+            for line in itertools.islice(fn, 0, 1):
+                line = line.lower().strip()
+                line = line.split(delimiter)
+                fn.close()
+                return line
+
+    @staticmethod
+    def readDictListChunk(file_path, start, end, delimiter, header):
+        dictChunk = []
+        with open(file_path) as fn:
+            for line in itertools.islice(fn, start, end):
+                dictChunk.append(LargeFileUtils.lineToDict(line, delimiter, header))
+        fn.close()
+        return dictChunk
+
+
+    @staticmethod
+    def lineToDict(line, delimiter, header):
+        print line
+        line = line.split(delimiter)
+        print len(line)
+        print len(header)
+        print
+        #line  = [item.strip().replace("\"", "") for item in line]
+        line =  dict(zip(header, line))
+        print
+        print line
+        print
+        print
+        return line
 
 class FileUtils:
     '''class for file/os util functions'''
@@ -289,10 +326,21 @@ class ListUtils:
     def makeChunks( lst, chunkSize,):
         return [ lst[x:x+ chunkSize] for x in xrange(0, len(lst), chunkSize)]
 
+class SubProcessUtils:
+    @staticmethod
+    def getFileLen(fname):
+        p = subprocess.Popen(['wc', '-l', fname], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result, err = p.communicate()
+        if p.returncode != 0:
+            raise IOError(err)
+        return int(result.strip().split()[0])
 
 class TimeoutException(Exception):
     #http://stackoverflow.com/questions/25027122/break-the-function-after-certain-time
     pass
+
+
+
 
 if __name__ == "__main__":
     main()
