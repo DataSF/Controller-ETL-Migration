@@ -58,8 +58,10 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, re
     dictNames = dict(zip(chunkhead, chunkhead_lower))
     chunk = chunk.rename(columns=dictNames)
     chunk = PandasUtils.fillNaWithBlank(chunk)
+    chunkCols = list(chunk.columns)
     for string in stringsToCast:
-      chunk = PandasUtils.castColAsString(chunk, string)
+      if string in chunkCols:
+        chunk = PandasUtils.castColAsString(chunk, string)
     dictList = PandasUtils.convertDfToDictrows(chunk)
     try:  
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
