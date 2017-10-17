@@ -96,13 +96,13 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  for fn in fileList[1:2]:
+  for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
     chunkSize = configItems['chunkSize']
-    if FileUtils.fileExists(fnFullPath):
+    if FileUtils.fileExists(fnFullPath) && FileUtils.fileExists(fnFullPathHistoric):
       print
       print "****"
       print fnFullPath
@@ -116,7 +116,7 @@ def main():
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
     else:
-      print "*** file doesn't exist****"
+      print "***ERROR: Files doesn't exist for " + fn + "******"
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
   if( len(jobResults) > 1 ):
