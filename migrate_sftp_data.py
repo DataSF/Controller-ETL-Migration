@@ -102,7 +102,7 @@ def main():
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
     chunkSize = configItems['chunkSize']
-    if FileUtils.fileExists(fnFullPath) && FileUtils.fileExists(fnFullPathHistoric):
+    if FileUtils.fileExists(fnFullPath) and FileUtils.fileExists(fnFullPathHistoric):
       print
       print "****"
       print fnFullPath
