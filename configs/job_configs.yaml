@@ -24,6 +24,9 @@ email_config_file: email_config_server.yaml
 download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
 #download_dir: /Users/j9/Desktop/Migrate-SFTP-Data/downloads/
 #download_dir: /Users/j9/Desktop/Controller-ETL-Migration/downloads/
+string_number_fields: ['department_code', 'fiscal_year']
+
+
 
 
 exception_logfile: exceptions.log

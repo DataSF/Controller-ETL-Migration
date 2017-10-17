@@ -47,7 +47,7 @@ def parse_opts():
   return fieldConfigFile, config_inputdir
 
 
-def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
+def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, replace=False):
   totalRows = 0
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
@@ -58,6 +58,8 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, replace=False):
     dictNames = dict(zip(chunkhead, chunkhead_lower))
     chunk = chunk.rename(columns=dictNames)
     chunk = PandasUtils.fillNaWithBlank(chunk)
+    for string in stringsToCast:
+      chunk = PandasUtils.castColAsString(chunk, string)
     dictList = PandasUtils.convertDfToDictrows(chunk)
     try:  
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
@@ -94,7 +96,7 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  for fn in fileList:
+  for fn in fileList[1:2]:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
@@ -106,14 +108,15 @@ def main():
       print fnFullPath
       print "******"
       print
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, True)
+      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['string_number_fields'],  True)
       print "Loaded " + str(fnLHistorical) + "lines"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['string_number_fields'])
       print "Loaded " + str(fnL) + "lines"
       dictList = fnL + fnLHistorical
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
     else:
+      print "*** file doesn't exist****"
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
   if( len(jobResults) > 1 ):
