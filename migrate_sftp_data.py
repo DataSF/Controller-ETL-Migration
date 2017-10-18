@@ -60,7 +60,7 @@ def prepareChunk(chunk, stringsToCast):
   dictList = PandasUtils.convertDfToDictrows(chunk)
   return dictList
 
-def postChunk(fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
+def postChunk(fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast, scrud):
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
     dictList = prepareChunk(chunk, stringsToCast)
     try:  
@@ -79,9 +79,10 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, re
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
   try:
-    totalRows = postChunk(fnFullPath, chunkSize, 'utf8', dataset_info, totalRows, stringsToCast)
-  except:
-    totalRows = postChunk(fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast)
+    totalRows = postChunk(fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast, scrud)
+  except Exception, e:
+    print str(e)
+    print "Could not load file"
   return totalRows
 
 def main():
