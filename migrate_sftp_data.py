@@ -47,22 +47,22 @@ def parse_opts():
   return fieldConfigFile, config_inputdir
 
 
-def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, replace=False):
-  totalRows = 0
-  dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
-  if replace:
-    dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding="utf8"):
-    chunkhead = chunk.columns.values
-    chunkhead_lower = [item.lower().replace("#", "") for item in chunkhead]
-    dictNames = dict(zip(chunkhead, chunkhead_lower))
-    chunk = chunk.rename(columns=dictNames)
-    chunk = PandasUtils.fillNaWithBlank(chunk)
-    chunkCols = list(chunk.columns)
-    for string in stringsToCast:
-      if string in chunkCols:
-        chunk = PandasUtils.castColAsString(chunk, string)
-    dictList = PandasUtils.convertDfToDictrows(chunk)
+def prepareChunk(chunk, stringsToCast):
+  chunkhead = chunk.columns.values
+  chunkhead_lower = [item.lower().replace("#", "") for item in chunkhead]
+  dictNames = dict(zip(chunkhead, chunkhead_lower))
+  chunk = chunk.rename(columns=dictNames)
+  chunk = PandasUtils.fillNaWithBlank(chunk)
+  chunkCols = list(chunk.columns)
+  for string in stringsToCast:
+    if string in chunkCols:
+      chunk = PandasUtils.castColAsString(chunk, string)
+  dictList = PandasUtils.convertDfToDictrows(chunk)
+  return dictList
+
+def postChunk(fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
+  for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
+    dictList = prepareChunk(chunk)
     try:  
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       dataset_info['row_id'] = 'blah'
@@ -70,6 +70,18 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, re
     except Exception, e:
       print "ERROR: Could not upload data"
       print str(e)
+  return totalRows
+
+
+def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, replace=False):
+  totalRows = 0
+  dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
+  if replace:
+    dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+  try:
+    totalRows = postChunk(fnFullPath, chunkSize, 'utf8', dataset_info, totalRows, stringsToCast)
+  except:
+    totalRows = postChunk(fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast)
   return totalRows
 
 def main():
@@ -88,6 +100,7 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
+  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -98,7 +111,8 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  for fn in fileList:
+  '''
+  for fn in fileList[1:]:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
