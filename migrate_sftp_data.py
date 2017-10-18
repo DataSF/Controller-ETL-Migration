@@ -62,7 +62,7 @@ def prepareChunk(chunk, stringsToCast):
 
 def postChunk(fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
-    dictList = prepareChunk(chunk)
+    dictList = prepareChunk(chunk, stringsToCast)
     try:  
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       dataset_info['row_id'] = 'blah'
