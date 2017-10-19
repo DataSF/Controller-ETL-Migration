@@ -60,7 +60,7 @@ def prepareChunk(chunk, stringsToCast):
   dictList = PandasUtils.convertDfToDictrows(chunk)
   return dictList
 
-def postChunk(fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast, scrud):
+def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
     dictList = prepareChunk(chunk, stringsToCast)
     try:  
@@ -79,7 +79,7 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, re
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
   try:
-    totalRows = postChunk(fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast, scrud)
+    totalRows = postChunk(scrud, fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast)
   except Exception, e:
     print str(e)
     print "Could not load file"
@@ -101,7 +101,6 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
-  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -112,8 +111,7 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  '''
-  for fn in fileList[1:]:
+  for fn in fileList:
     print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
