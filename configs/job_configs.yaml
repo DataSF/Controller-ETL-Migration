@@ -27,8 +27,6 @@ download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
 string_number_fields: ['department_code', 'fiscal_year']
 
 
-
-
 exception_logfile: exceptions.log
 log_dir: logs/
 app_name: Controller ETL Migration

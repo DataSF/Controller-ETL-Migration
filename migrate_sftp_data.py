@@ -61,12 +61,14 @@ def prepareChunk(chunk, stringsToCast):
   return dictList
 
 def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
+  totalRows = 0
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
     dictList = prepareChunk(chunk, stringsToCast)
     try:  
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       dataset_info['row_id'] = 'blah'
-      totalRows = totalRows + chunkSize
+      totalRows =  dataset_info['DatasetRecordsCnt'] + totalRows
+      print totalRows
     except Exception, e:
       print "ERROR: Could not upload data"
       print str(e)
@@ -74,7 +76,7 @@ def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRow
 
 
 def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, replace=False):
-  totalRows = 0
+  totalRows  = 0
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
@@ -101,6 +103,7 @@ def main():
   fileList = configItems['files'].keys()
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
+  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -111,29 +114,37 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
+  '''
   for fn in fileList:
-    print fn
-    fnFullPath = configItems['download_dir']+fn
-    fnConfigObj = configItems['files'][fn]
-    fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
-    chunkSize = configItems['chunkSize']
-    if FileUtils.fileExists(fnFullPath) and FileUtils.fileExists(fnFullPathHistoric):
-      print
-      print "****"
-      print fnFullPath
-      print "******"
-      print
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['string_number_fields'],  True)
-      print "Loaded " + str(fnLHistorical) + "lines"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['string_number_fields'])
-      print "Loaded " + str(fnL) + "lines"
-      dictList = fnL + fnLHistorical
-      dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': fnL+fnLHistorical, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-      jobResults.append(dataset_info)
-    else:
-      print "***ERROR: Files doesn't exist for " + fn + "******"
-      dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
-      jobResults.append(dataset_info)
+    if fn == 'con_0025_purchasing_commodity_data.csv': 
+      print fn
+      fnFullPath = configItems['download_dir']+fn
+      fnConfigObj = configItems['files'][fn]
+      fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
+      chunkSize = configItems['chunkSize']
+      if FileUtils.fileExists(fnFullPath) and FileUtils.fileExists(fnFullPathHistoric):
+        print
+        print "****"
+        print fnFullPath
+        print "******"
+        print
+        fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['string_number_fields'],  True)
+        fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
+        print fnHistoricFileLen
+        print "Loaded " + str(fnLHistorical) + "lines"
+        fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['string_number_fields'])
+        fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
+        totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
+        print totalFileSrcLen 
+        print "Loaded " + str(fnL) + "lines"
+        dictList = fnL + fnLHistorical
+
+        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+        jobResults.append(dataset_info)
+      else:
+        print "***ERROR: Files doesn't exist for " + fn + "******"
+        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+        jobResults.append(dataset_info)
   if( len(jobResults) > 1 ):
     dsse.sendJobStatusEmail(jobResults)
   else:
