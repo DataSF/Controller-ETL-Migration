@@ -68,7 +68,6 @@ def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRow
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       dataset_info['row_id'] = 'blah'
       totalRows =  dataset_info['DatasetRecordsCnt'] + totalRows
-      print totalRows
     except Exception, e:
       print "ERROR: Could not upload data"
       print str(e)
@@ -132,16 +131,22 @@ def main():
         print
         fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, configItems['string_number_fields'],  True)
         fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
+        print "*****************"
         print fnHistoricFileLen
-        print "Loaded " + str(fnLHistorical) + "lines"
+        print "Loaded " + str(fnLHistorical) + "lines- Historic"
+        print "******************"
         fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'])
         fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
-        totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
-        print totalFileSrcLen 
-        print "Loaded " + str(fnL) + "lines"
-        dictList = fnL + fnLHistorical
+        print "*****************"
+        print "Loaded " + str(fnL) + "lines- Historic"
+        print "******************"
 
-        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':fnL+fnLHistorical, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+        totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
+        print "*** total src lines***: " + str(totalFileSrcLen)
+        print 
+        totalLoadLinesLen =  fnL + fnLHistorical
+        print "*** total loaded lines***: " + str(totalLoadLinesLen)
+        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':totalLoadLinesLen, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
         jobResults.append(dataset_info)
       else:
         print "***ERROR: Files doesn't exist for " + fn + "******"
