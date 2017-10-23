@@ -129,6 +129,7 @@ def main():
         print fnFullPath
         print "******"
         print
+        '''
         fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, configItems['string_number_fields'],  True)
         fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
         print "*****************"
@@ -144,9 +145,11 @@ def main():
         totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
         print "*** total src lines***: " + str(totalFileSrcLen)
         print 
-        totalLoadLinesLen =  fnL + fnLHistorical
-        print "*** total loaded lines***: " + str(totalLoadLinesLen)
-        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':totalLoadLinesLen, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+        '''
+        #print "*** total loaded lines***: " + str(totalLoadLinesLen)
+        totalFileSrcLen = '1627797'
+        dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
+        dataset_info['DatasetRecordsCnt'] = scrud.getRowCnt(dataset_info)
         jobResults.append(dataset_info)
       else:
         print "***ERROR: Files doesn't exist for " + fn + "******"
