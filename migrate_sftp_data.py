@@ -147,7 +147,7 @@ def main():
         print 
         '''
         #print "*** total loaded lines***: " + str(totalLoadLinesLen)
-        totalFileSrcLen = '1627797'
+        totalFileSrcLen = 1627797
         dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
         dataset_info['DatasetRecordsCnt'] = scrud.getRowCnt(dataset_info)
         print dataset_info
