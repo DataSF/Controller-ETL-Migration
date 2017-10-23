@@ -104,6 +104,7 @@ def main():
   fileList = ['con_0025_purchasing_commodity_data.csv']
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
+  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -114,12 +115,14 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
+  '''
   for fn in fileList:
     if fn == 'con_0025_purchasing_commodity_data.csv': 
       print fn
       fnFullPath = configItems['download_dir']+fn
       fnConfigObj = configItems['files'][fn]
       fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
+      encodingType = configItems['files'][fn]['encoding']
       chunkSize = configItems['chunkSize']
       if FileUtils.fileExists(fnFullPath) and FileUtils.fileExists(fnFullPathHistoric):
         print
@@ -127,11 +130,11 @@ def main():
         print fnFullPath
         print "******"
         print
-        fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['encoding'], configItems['string_number_fields'],  True)
+        fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, configItems['string_number_fields'],  True)
         fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
         print fnHistoricFileLen
         print "Loaded " + str(fnLHistorical) + "lines"
-        fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['encoding'], configItems['string_number_fields'])
+        fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'])
         fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
         totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
         print totalFileSrcLen 
