@@ -159,7 +159,7 @@ def main():
         dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
         jobResults.append(dataset_info)
   if( len(jobResults) > 0 ):
-    print jboResults
+    print jobResults
     dsse.sendJobStatusEmail(jobResults)
   else:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
