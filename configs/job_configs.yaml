@@ -6,18 +6,22 @@ files:
     fourXFour: 3uk3-wtgy
     dataset_name: CON-Spending and Revenue
     historic: con_0003_spending_and_revenue_all_years_historic.csv
+    encoding: cp1252
   con_0005_vendor_payments_purchase_order_summary.csv:
     fourXFour: qr96-zkwh
     historic: con_0005_vendor_payments_purchase_order_summary_historic.csv
     dataset_name: CON-Vendor Payments
+    encoding: cp1252
   con_0006_vendor_payments_vouchers.csv:
     fourXFour:  cjcy-h98g
     dataset_name: CON-Vouchers
     historic: con_0006_vendor_payments_vouchers_historic.csv
+    encoding: cp1252
   con_0025_purchasing_commodity_data.csv:
     fourXFour: v3uy-zu9r
     historic: con_0025_purchasing_commodity_data_historic.csv
     dataset_name: CON-Purchasing Commodity data
+    encoding: utf8
 remote_dir: /CONT/
 email_config_file: email_config_server.yaml
 #email_config_file: email_config_gmail.yaml

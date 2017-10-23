@@ -75,13 +75,13 @@ def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRow
   return totalRows
 
 
-def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, stringsToCast, replace=False):
+def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType stringsToCast, replace=False):
   totalRows  = 0
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
   try:
-    totalRows = postChunk(scrud, fnFullPath, chunkSize, 'cp1252', dataset_info, totalRows, stringsToCast)
+    totalRows = postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast)
   except Exception, e:
     print str(e)
     print "Could not load file"
@@ -127,11 +127,11 @@ def main():
         print fnFullPath
         print "******"
         print
-        fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['string_number_fields'],  True)
+        fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, configItems['encoding'], configItems['string_number_fields'],  True)
         fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
         print fnHistoricFileLen
         print "Loaded " + str(fnLHistorical) + "lines"
-        fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['string_number_fields'])
+        fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, configItems['encoding'], configItems['string_number_fields'])
         fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
         totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
         print totalFileSrcLen 
