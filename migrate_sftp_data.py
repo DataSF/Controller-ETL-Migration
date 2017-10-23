@@ -150,6 +150,8 @@ def main():
         totalFileSrcLen = '1627797'
         dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
         dataset_info['DatasetRecordsCnt'] = scrud.getRowCnt(dataset_info)
+        print dataset_info
+        dataset_info  = scrud.checkCompleted(self, dataset)
         jobResults.append(dataset_info)
       else:
         print "***ERROR: Files doesn't exist for " + fn + "******"
