@@ -75,7 +75,7 @@ def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRow
   return totalRows
 
 
-def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType stringsToCast, replace=False):
+def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, stringsToCast, replace=False):
   totalRows  = 0
   dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': 'blah'}
   if replace:
