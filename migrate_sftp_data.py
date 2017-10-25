@@ -52,10 +52,11 @@ def prepareChunk(chunk, stringsToCast):
   chunkhead_lower = [item.lower().replace("#", "") for item in chunkhead]
   dictNames = dict(zip(chunkhead, chunkhead_lower))
   chunk = chunk.rename(columns=dictNames)
-  chunk = PandasUtils.fillNaWithBlank(chunk)
+  #chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
   print chunk[0:2]
-  print chunk.dtypes
+  #print chunk.dtypes
+  '''
   for string in stringsToCast:
     if string in chunkCols:
       #if string == 'fiscal_year':
@@ -64,12 +65,14 @@ def prepareChunk(chunk, stringsToCast):
       print chunk[0:2]
       print
       chunk = PandasUtils.castColAsString(chunk, string)
+  '''
   def func(x):
     try:
         return int(x)
     except ValueError:
         return x
   chunk = chunk.applymap(func)
+  chunk = chunk.fillna('', inplace=True)
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
   return dictList
