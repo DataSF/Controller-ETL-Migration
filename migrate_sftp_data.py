@@ -54,7 +54,6 @@ def prepareChunk(chunk, stringsToCast):
   chunk = chunk.rename(columns=dictNames)
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
-  chunk = chunk.fillna('', inplace=True)
   print chunk[0:2]
   print chunk.dtypes
   for string in stringsToCast:
@@ -68,7 +67,6 @@ def prepareChunk(chunk, stringsToCast):
       print chunk.dtypes
   print "****"
   print chunk.dtypes
-  print
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
   return dictList
