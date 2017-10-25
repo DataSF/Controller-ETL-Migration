@@ -63,6 +63,10 @@ def prepareChunk(chunk, stringsToCast):
       print chunk[0:2]
       print
       chunk = PandasUtils.castColAsString(chunk, string)
+      print chunk.dtypes
+  print "****"
+  print df.dtypes
+  print
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
   return dictList
