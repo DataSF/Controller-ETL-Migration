@@ -54,9 +54,6 @@ def prepareChunk(chunk, stringsToCast):
   chunk = chunk.rename(columns=dictNames)
   #chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
-  print "here"
-  print chunk[0:2]
-  print "****"
   #print chunk.dtypes
   '''
   for string in stringsToCast:
@@ -76,7 +73,6 @@ def prepareChunk(chunk, stringsToCast):
   chunk.fillna('', inplace=True)
   chunk = chunk.applymap(func)
   dictList =  chunk.applymap(func).to_dict('records')
-  print dictList[0:2]
   return dictList
 
 def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, stringsToCast):
