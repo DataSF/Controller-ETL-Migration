@@ -75,7 +75,7 @@ def prepareChunk(chunk, stringsToCast):
         return x
   chunk.fillna('', inplace=True)
   chunk = chunk.applymap(func)
-  dicList =  chunk.applymap(func).to_dict('records')
+  dictList =  chunk.applymap(func).to_dict('records')
   print dictList[0:2]
   return dictList
 
