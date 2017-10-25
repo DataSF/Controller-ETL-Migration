@@ -1,19 +1,18 @@
 config_dir: /home/ubuntu/Migrate-SFTP-Data/configs/
-#config_dir: /Users/j9/Desktop/Controller-ETL-Migration/configs/
 #config_dir: /Users/j9/Desktop/Migrate-SFTP-Data/configs/
 files:
   con_0003_spending_and_revenue_all_years.csv:
-    fourXFour: 3uk3-wtgy
+    fourXFour: bpnb-jwfb
     dataset_name: CON-Spending and Revenue
     historic: con_0003_spending_and_revenue_all_years_historic.csv
     encoding: cp1252
   con_0005_vendor_payments_purchase_order_summary.csv:
-    fourXFour: qr96-zkwh
+    fourXFour: p5r5-fd7g
     historic: con_0005_vendor_payments_purchase_order_summary_historic.csv
     dataset_name: CON-Vendor Payments
     encoding: cp1252
   con_0006_vendor_payments_vouchers.csv:
-    fourXFour:  cjcy-h98g
+    fourXFour:  n9pm-xkyq
     dataset_name: CON-Vouchers
     historic: con_0006_vendor_payments_vouchers_historic.csv
     encoding: cp1252
@@ -27,7 +26,6 @@ email_config_file: email_config_server.yaml
 #email_config_file: email_config_gmail.yaml
 download_dir: /home/ubuntu/Migrate-SFTP-Data/downloads/
 #download_dir: /Users/j9/Desktop/Migrate-SFTP-Data/downloads/
-#download_dir: /Users/j9/Desktop/Controller-ETL-Migration/downloads/
 string_number_fields: ['department_code', 'fiscal_year']
 
 

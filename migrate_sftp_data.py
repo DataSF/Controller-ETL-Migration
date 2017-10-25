@@ -64,7 +64,7 @@ def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRow
   totalRows = 0
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
     dictList = prepareChunk(chunk, stringsToCast)
-    try:  
+    try:
       dataset_info = scrud.postDataToSocrata(dataset_info, dictList)
       dataset_info['row_id'] = 'blah'
       totalRows =  dataset_info['DatasetRecordsCnt'] + totalRows
@@ -116,7 +116,7 @@ def main():
   sftp.closeSFTPConnection()
 
   for fn in fileList:
-    #if fn == 'con_0025_purchasing_commodity_data.csv': 
+    #if fn == 'con_0025_purchasing_commodity_data.csv':
       #print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
@@ -144,7 +144,7 @@ def main():
 
       totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
       print "*** total src lines***: " + str(totalFileSrcLen)
-      print 
+      print
 
       print "*** total loaded lines***: " + str(totalLoadLinesLen)
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
@@ -153,12 +153,12 @@ def main():
       dataset_info  = scrud.checkCompleted(dataset_info)
       print dataset_info
       jobResults.append(dataset_info)
-      print 
+      print
     else:
       print "***ERROR: Files doesn't exist for " + fn + "******"
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':0, 'DatasetRecordsCnt':-1, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       jobResults.append(dataset_info)
-  
+
 
   if( len(jobResults) > 0 ):
     print jobResults
