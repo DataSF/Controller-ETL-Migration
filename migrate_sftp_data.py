@@ -64,7 +64,12 @@ def prepareChunk(chunk, stringsToCast):
       print chunk[0:2]
       print
       chunk = PandasUtils.castColAsString(chunk, string)
-  print "****"
+  def func(x):
+    try:
+        return int(x)
+    except ValueError:
+        return x
+  chunk = chunk.applymap(func)
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
   return dictList
