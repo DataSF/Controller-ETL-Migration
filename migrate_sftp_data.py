@@ -60,8 +60,8 @@ def prepareChunk(chunk, stringsToCast):
       #if string == 'fiscal_year':
       #  chunk[string] = chunk[string].astype(float).astype(int)
       chunk = PandasUtils.castColAsString(chunk, string)
-      print chunk[0:2]
   dictList = PandasUtils.convertDfToDictrows(chunk)
+  print dictList[0:2]
   return dictList
 
 def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, stringsToCast):
