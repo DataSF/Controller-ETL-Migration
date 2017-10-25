@@ -55,7 +55,8 @@ def prepareChunk(chunk, stringsToCast):
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
   for string in stringsToCast:
-    print string
+    if(string == 'fiscal_year'):
+      chunk[string] = chunk[string].astype(int)
     if string in chunkCols:
       chunk = PandasUtils.castColAsString(chunk, string)
   dictList = PandasUtils.convertDfToDictrows(chunk)
