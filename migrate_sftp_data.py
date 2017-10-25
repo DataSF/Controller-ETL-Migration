@@ -61,7 +61,7 @@ def prepareChunk(chunk, stringsToCast):
   dictList = PandasUtils.convertDfToDictrows(chunk)
   return dictList
 
-def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast):
+def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, stringsToCast):
   totalRows = 0
   for chunk in pd.read_csv(fnFullPath, chunksize=chunkSize, error_bad_lines=False, encoding=encodingType):
     dictList = prepareChunk(chunk, stringsToCast)
@@ -81,7 +81,7 @@ def loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, str
   if replace:
     dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt':chunkSize, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
   try:
-    totalRows = postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, totalRows, stringsToCast)
+    totalRows = postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info,  stringsToCast)
   except Exception, e:
     print str(e)
     print "Could not load file"
@@ -131,23 +131,23 @@ def main():
       print "******"
       print
 
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, configItems['string_number_fields'],  True)
+      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, configItems['string_number_fields'],  True)
       fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
       print "*****************"
       print fnHistoricFileLen
       print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'])
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'], False)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
       print "*****************"
-      print "Loaded " + str(fnL) + "lines- Historic"
+      print "Loaded " + str(fnL) + "lines"
       print "******************"
 
       totalFileSrcLen = (fnHistoricFileLen + fnLFileLen) -2 #make sure to remove the header rows
       print "*** total src lines***: " + str(totalFileSrcLen)
       print
 
-      print "*** total loaded lines***: " + str(totalLoadLinesLen)
+      print "*** total loaded lines***: " + str(totalFileSrcLen)
       dataset_info = {'Socrata Dataset Name': fnConfigObj['dataset_name'], 'SrcRecordsCnt': totalFileSrcLen, 'DatasetRecordsCnt':0, 'fourXFour': fnConfigObj['fourXFour'], 'row_id': ''}
       dataset_info['DatasetRecordsCnt'] = scrud.getRowCnt(dataset_info)
       print dataset_info
