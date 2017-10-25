@@ -54,12 +54,13 @@ def prepareChunk(chunk, stringsToCast):
   chunk = chunk.rename(columns=dictNames)
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
-  print chunkCols
+  print chunk[0:2]
   for string in stringsToCast:
     if string in chunkCols:
       #if string == 'fiscal_year':
       #  chunk[string] = chunk[string].astype(float).astype(int)
       chunk = PandasUtils.castColAsString(chunk, string)
+      print chunk[0:2]
   dictList = PandasUtils.convertDfToDictrows(chunk)
   return dictList
 
