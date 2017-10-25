@@ -55,6 +55,7 @@ def prepareChunk(chunk, stringsToCast):
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
   for string in stringsToCast:
+    print string
     if string in chunkCols:
       chunk = PandasUtils.castColAsString(chunk, string)
   dictList = PandasUtils.convertDfToDictrows(chunk)
