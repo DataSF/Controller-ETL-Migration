@@ -117,8 +117,6 @@ def main():
   sftp.closeSFTPConnection()
   '''
   for fn in fileList:
-    #if fn == 'con_0025_purchasing_commodity_data.csv':
-      #print fn
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
     fnFullPathHistoric = configItems['download_dir'] + configItems['files'][fn]['historic']
@@ -135,7 +133,7 @@ def main():
       fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
       print "*****************"
       print fnHistoricFileLen
-      print "Loaded " + str(fnLHistorical) + "lines- Historic"
+      #print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
       fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'], False)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
