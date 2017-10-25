@@ -55,6 +55,7 @@ def prepareChunk(chunk, stringsToCast):
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
   print chunk[0:2]
+  print chunk.dtypes
   for string in stringsToCast:
     if string in chunkCols:
       #if string == 'fiscal_year':
@@ -65,7 +66,7 @@ def prepareChunk(chunk, stringsToCast):
       chunk = PandasUtils.castColAsString(chunk, string)
       print chunk.dtypes
   print "****"
-  print df.dtypes
+  print chunk.dtypes
   print
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
