@@ -59,7 +59,9 @@ def prepareChunk(chunk, stringsToCast):
     if string in chunkCols:
       #if string == 'fiscal_year':
       #  chunk[string] = chunk[string].astype(float).astype(int)
+      print "*** after***"
       print chunk[0:2]
+      print
       chunk = PandasUtils.castColAsString(chunk, string)
   dictList = PandasUtils.convertDfToDictrows(chunk)
   print dictList[0:2]
