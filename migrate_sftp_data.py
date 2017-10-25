@@ -57,8 +57,6 @@ def prepareChunk(chunk, stringsToCast):
   print chunkCols
   for string in stringsToCast:
     if string in chunkCols:
-
-      print chunk[0:10]
       #if string == 'fiscal_year':
       #  chunk[string] = chunk[string].astype(float).astype(int)
       chunk = PandasUtils.castColAsString(chunk, string)
@@ -139,7 +137,7 @@ def main():
       print fnHistoricFileLen
       #print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'], False)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, configItems['string_number_fields'], True)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
       print "*****************"
       print "Loaded " + str(fnL) + "lines"
