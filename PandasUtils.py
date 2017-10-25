@@ -24,7 +24,7 @@ class PandasUtils:
     #return df.drop(df[list_of_cols_to_remove],inplace=True,axis=1)
 
   @staticmethod
-  def castColAsString(df, field_name, intField):
+  def castColAsString(df, field_name):
     df[field_name] = df[field_name].astype(str, errors='coerce')
     return df
 
