@@ -114,11 +114,10 @@ def main():
   clientItems = sc.connectToSocrataConfigItems()
   scrud = SocrataCRUD(client, clientItems, configItems, logger)
   sQobj = SocrataQueries(clientItems, configItems, logger)
-  #fileList = configItems['files'].keys()
-  fileList = ['con_0025_purchasing_commodity_data.csv']
+  fileList = configItems['files'].keys()
+  #fileList = ['con_0025_purchasing_commodity_data.csv']
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
-  '''
   sftp = SFTPUtils(configItems)
   print sftp
   try:
@@ -129,7 +128,6 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
-  '''
   for fn in fileList:
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
