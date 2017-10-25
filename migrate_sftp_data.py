@@ -54,7 +54,7 @@ def prepareChunk(chunk, stringsToCast):
   chunk = chunk.rename(columns=dictNames)
   chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
-  chunk = chunk.df.fillna('', inplace=True)
+  chunk = chunk.fillna('', inplace=True)
   print chunk[0:2]
   print chunk.dtypes
   for string in stringsToCast:
