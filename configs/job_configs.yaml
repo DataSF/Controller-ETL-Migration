@@ -24,7 +24,7 @@ files:
     historic: con_0025_purchasing_commodity_data_historic.csv
     dataset_name: CON-Purchasing Commodity data
     encoding: utf8
-    string_number_fields: ['department_code']
+    string_number_fields: ['fiscal_year', 'department_code']
 remote_dir: /CONT/
 email_config_file: email_config_server.yaml
 #email_config_file: email_config_gmail.yaml
