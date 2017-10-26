@@ -26,9 +26,9 @@ class PandasUtils:
   @staticmethod
   def castColAsString(df, field_name):
     def func(x):
-    try:
+      try:
         return int(x)
-    except ValueError:
+      except ValueError:
         return x
     df[field_name] = df[field_name].applymap(func)
     return df
