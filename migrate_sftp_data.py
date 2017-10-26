@@ -55,7 +55,12 @@ def prepareChunk(chunk, stringsToCast):
   #chunk = PandasUtils.fillNaWithBlank(chunk)
   chunkCols = list(chunk.columns)
   #print chunk.dtypes
-  '''
+  def func(x):
+    try:
+        return int(x)
+    except ValueError:
+        return x
+  chunk = chunk.fillna('', inplace=True)
   for string in stringsToCast:
     if string in chunkCols:
       #if string == 'fiscal_year':
@@ -64,15 +69,7 @@ def prepareChunk(chunk, stringsToCast):
       print chunk[0:2]
       print
       chunk = PandasUtils.castColAsString(chunk, string)
-  '''
-  def func(x):
-    try:
-        return int(x)
-    except ValueError:
-        return x
-  chunk.fillna('', inplace=True)
-  chunk = chunk.applymap(func)
-  dictList =  chunk.applymap(func).to_dict('records')
+  dictList = chunk.to_dict('records')
   return dictList
 
 def postChunk(scrud, fnFullPath, chunkSize, encodingType, dataset_info, stringsToCast):
