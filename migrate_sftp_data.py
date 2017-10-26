@@ -111,6 +111,7 @@ def main():
   fileListHistoric = [configItems['files'][fn]['historic'] for fn in fileList]
   jobResults = []
   sftp = SFTPUtils(configItems)
+  '''
   print sftp
   try:
     print "**** Downloading Files From the SFTP **********"
@@ -120,6 +121,7 @@ def main():
     print "ERROR: Could not download files from the SFTP"
     print str(e)
   sftp.closeSFTPConnection()
+  '''
   for fn in fileList:
     fnFullPath = configItems['download_dir']+fn
     fnConfigObj = configItems['files'][fn]
@@ -134,13 +136,13 @@ def main():
       print "******"
       print
 
-      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, string_number_fields,  True)
+      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, string_number_fields,  True)
       fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
       print "*****************"
       print fnHistoricFileLen
       print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, string_number_fields, False)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, string_number_fields, True)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
       print "*****************"
       print "Loaded " + str(fnL) + "lines"
