@@ -140,7 +140,7 @@ def main():
       fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
       print "*****************"
       print fnHistoricFileLen
-      print "Loaded " + str(fnLHistorical) + "lines- Historic"
+      #print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
       fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, string_number_fields, True)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
