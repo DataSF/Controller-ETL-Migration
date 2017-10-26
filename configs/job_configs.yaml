@@ -20,7 +20,7 @@ files:
     encoding: cp1252
     string_number_fields: ['department_code', 'fiscal_year']
   con_0025_purchasing_commodity_data.csv:
-    fourXFour: v3uy-zu9r
+    fourXFour: ebsh-uavg
     historic: con_0025_purchasing_commodity_data_historic.csv
     dataset_name: CON-Purchasing Commodity data
     encoding: utf8
