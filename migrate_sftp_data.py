@@ -141,13 +141,13 @@ def main():
       print "******"
       print
 
-      #fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, string_number_fields,  True)
+      fnLHistorical = loadFileChunks2(scrud, fnConfigObj, fnFullPathHistoric, chunkSize, encodingType, string_number_fields,  True)
       fnHistoricFileLen = SubProcessUtils.getFileLen( fnFullPathHistoric)
       print "*****************"
       print fnHistoricFileLen
-      #print "Loaded " + str(fnLHistorical) + "lines- Historic"
+      print "Loaded " + str(fnLHistorical) + "lines- Historic"
       print "******************"
-      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, string_number_fields, True)
+      fnL = loadFileChunks2(scrud, fnConfigObj, fnFullPath, chunkSize, encodingType, string_number_fields, False)
       fnLFileLen = SubProcessUtils.getFileLen(fnFullPath)
       print "*****************"
       print "Loaded " + str(fnL) + "lines"
