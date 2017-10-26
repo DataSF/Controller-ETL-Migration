@@ -25,12 +25,12 @@ class PandasUtils:
 
   @staticmethod
   def castColAsString(df, field_name):
-    def func(x):
+    def castBlanks(x):
       try:
         return int(x)
       except ValueError:
         return x
-    df[field_name] = df[field_name].applymap(func)
+    df[field_name] =  df.apply(lambda row: castBlanks(row[field_name]), axis=1)
     return df
 
   @staticmethod
