@@ -60,7 +60,7 @@ def prepareChunk(chunk, stringsToCast):
         return int(x)
     except ValueError:
         return x
-  chunk = chunk.fillna('', inplace=True)
+  chunk.fillna('', inplace=True)
   for string in stringsToCast:
     if string in chunkCols:
       #if string == 'fiscal_year':
